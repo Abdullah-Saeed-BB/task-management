@@ -21,7 +21,7 @@ function UsersList({ users, isBackWhite = true }: Props) {
         {users.length <= 5 ? (
           users.map((user) => (
             <li
-              className={`rounded-full ring-2 ring-${
+              className={`shadow-md rounded-full ring-2 ring-${
                 isBackWhite ? "white" : "slate-300"
               }`}
               key={user.id}
@@ -33,7 +33,7 @@ function UsersList({ users, isBackWhite = true }: Props) {
           <>
             {users.slice(0, 4).map((user) => (
               <li
-                className={`rounded-full ring-2 ${
+                className={`drop-shadow-md rounded-full ring-2 ${
                   isBackWhite ? "ring-white" : "ring-slate-300"
                 }`}
                 key={user.id}

@@ -1,3 +1,5 @@
+import KanbanBorder from "@/components/KanbanBorder/KanbanBorder";
+import Loading from "@/components/Loading";
 import TitleInput from "@/components/Project/TitleInput";
 import UsersList from "@/components/UsersList";
 import type { Project } from "@/lib/type";
@@ -12,14 +14,19 @@ async function ProjectPage({ params }: { params: Params }) {
 
   const project: Project = await res.json();
 
-  return (
-    <div>
-      <header className="h-14 px-4 bg-slate-300 flex items-center gap-5">
-        <TitleInput name={project.title} id={projectId} />
-        <UsersList users={project.users} isBackWhite={false} />
-      </header>
-    </div>
-  );
+  if (project) {
+    return (
+      <div>
+        <header className="h-14 px-4 bg-slate-300 flex items-center gap-5">
+          <TitleInput name={project.title} id={projectId} />
+          <UsersList users={project.users} isBackWhite={false} />
+        </header>
+        <div>
+          <KanbanBorder Tasks={project.tasks || []} projectId={project.id} />
+        </div>
+      </div>
+    );
+  } else return <Loading />;
 }
 
 export default ProjectPage;

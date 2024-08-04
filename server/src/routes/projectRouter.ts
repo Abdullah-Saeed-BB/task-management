@@ -33,7 +33,13 @@ router.get("/:id", async (req: Request, res: Response) => {
   try {
     const project = await prisma.project.findFirst({
       where: { id },
-      include: { tasks: true, users: true },
+      include: {
+        tasks: {
+          include: { assignedTo: { select: { id: true, name: true } } },
+          orderBy: { createdAt: "desc" },
+        },
+        users: true,
+      },
     });
 
     if (!project) throw new Error("We did not find this project");

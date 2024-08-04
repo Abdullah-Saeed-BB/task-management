@@ -64,6 +64,15 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    // Tasks
+    changeTaskStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `task/${id}`,
+        method: "PUT",
+        body: { status },
+      }),
+    }),
   }),
 });
 
@@ -77,4 +86,5 @@ export const {
   useGetUsersQuery,
   useDeleteUserMutation,
   useCreateUserMutation,
+  useChangeTaskStatusMutation,
 } = apiSlice;

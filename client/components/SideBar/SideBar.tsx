@@ -5,7 +5,7 @@ import ProjectsLinks from "./ProjectsLinks";
 
 async function SideBar() {
   return (
-    <div className="bg-slate-200 w-64 py-6 h-screen text-slate-700 flex flex-col justify-between fixed">
+    <div className="bg-slate-200 w-64 py-6 h-screen text-slate-700 flex flex-col justify-between fixed z-50">
       <div className="space-y-10 grow flex flex-col">
         <Navlink />
         <ProjectsLinks />

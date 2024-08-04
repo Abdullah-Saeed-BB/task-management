@@ -10,6 +10,7 @@ export interface Project {
     role: "EMPLOYEE" | "MANAGER";
   }[];
   _count: { tasks: number };
+  tasks?: Task[];
 }
 
 export interface User {
@@ -18,4 +19,15 @@ export interface User {
   email: string;
   password: string;
   role: "EMPLOYEE" | "MANAGER";
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  notes: string;
+  status: "STUCK" | "WORKING_ON" | "DONE";
+  dueDate: string;
+  assignedToId: string;
+  assignedTo: User;
 }
