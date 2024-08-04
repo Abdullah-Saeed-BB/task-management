@@ -39,7 +39,8 @@ router.post("/", async (req: Request, res: Response) => {
 
     res.json(createdTask);
   } catch (err: any) {
-    res.status(400).json("Cannot create this task, there is error happened");
+    // res.status(400).json("Cannot create this task, there is error happened");
+    res.status(400).json(err.message)
   }
 });
 

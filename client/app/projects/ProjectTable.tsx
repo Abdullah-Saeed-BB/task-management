@@ -15,7 +15,8 @@ function ProjectTable() {
 
   if (isLoading) return <Loading />;
   if (isError) return <div>Error fetching data</div>;
-
+  if (data) {
+    
   return (
     <Table
       title="Projects"
@@ -34,7 +35,8 @@ function ProjectTable() {
         </>
       )}
     </Table>
-  );
+  )
+}
 }
 
 export default ProjectTable;

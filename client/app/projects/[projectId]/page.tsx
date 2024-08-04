@@ -4,6 +4,7 @@ import TitleInput from "@/components/Project/TitleInput";
 import UsersList from "@/components/UsersList";
 import type { Project } from "@/lib/type";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import Link from "next/link";
 
 async function ProjectPage({ params }: { params: Params }) {
   const { projectId } = params;
@@ -21,8 +22,10 @@ async function ProjectPage({ params }: { params: Params }) {
           <TitleInput name={project.title} id={projectId} />
           <UsersList users={project.users} isBackWhite={false} />
         </header>
-        <div>
-          <KanbanBorder Tasks={project.tasks || []} projectId={project.id} />
+        <div className="mx-auto max-w-5xl">
+          <div className="flex justify-end">
+          </div>
+          <KanbanBorder Tasks={project.tasks || []} projectId={projectId}/>
         </div>
       </div>
     );

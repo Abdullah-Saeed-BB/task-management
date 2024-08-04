@@ -16,6 +16,11 @@ export const apiSlice = createApi({
       query: (id) => `project/${id}`,
     }),
 
+    getProjectsUsers: builder.query<{users: User[]}, string>({
+      query: (id) => `project/${id}/users`,
+      providesTags: ["Project"]
+    }),
+
     createProject: builder.mutation({
       query: (project) => ({
         url: "project",
@@ -73,6 +78,15 @@ export const apiSlice = createApi({
         body: { status },
       }),
     }),
+
+    createTask: builder.mutation({
+      query: (task) => ({
+        url: 'task',
+        method: "POST",
+        body: task
+      }),
+      invalidatesTags: ["Project"]
+    })
   }),
 });
 
@@ -80,6 +94,7 @@ export const apiSlice = createApi({
 export const {
   useGetProjectsQuery,
   useGetProjectQuery,
+  useGetProjectsUsersQuery,
   useCreateProjectMutation,
   useDeleteProjectMutation,
   useUpdateProjectMutation,
@@ -87,4 +102,5 @@ export const {
   useDeleteUserMutation,
   useCreateUserMutation,
   useChangeTaskStatusMutation,
+  useCreateTaskMutation,
 } = apiSlice;

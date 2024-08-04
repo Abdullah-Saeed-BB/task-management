@@ -6,6 +6,7 @@ type Props<T> = {
   type: HTMLInputTypeAttribute;
   onChange: ChangeEventHandler<HTMLInputElement>;
   value: T;
+  required?: boolean
 };
 
 function Input<T extends string | number>({
@@ -14,6 +15,7 @@ function Input<T extends string | number>({
   type,
   onChange,
   value,
+  required=true
 }: Props<T>) {
   return (
     <div className="mb-5">
@@ -27,6 +29,7 @@ function Input<T extends string | number>({
         value={value}
         onChange={onChange}
         className="w-full px-2 py-1 border rounded-md"
+        required={required}
       />
     </div>
   );

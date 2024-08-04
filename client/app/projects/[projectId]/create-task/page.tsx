@@ -4,22 +4,36 @@ import {
   CreateButton,
 } from "@/components/CreateForm/FormButtons";
 import CreateInput from "@/components/CreateForm/Input";
+import Select from "@/components/CreateForm/Select";
 import Textarea from "@/components/CreateForm/Textarea";
-import Link from "next/link";
+import ErrorPopup from "@/components/ErrorPopup";
+import Loading from "@/components/Loading";
+import { useCreateTaskMutation, useGetProjectsUsersQuery } from "@/lib/slices/apiSlice";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useSearchParams } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
-function CreateTask() {
+function CreateTask({params}: {params: Params}) {
+  const searchParams = useSearchParams();
+  const status = searchParams.get("status");
+
+  const {projectId} = params
+  const [error, setError] = useState(null);
+  const [createTask] = useCreateTaskMutation()
+  const {data, isLoading, isError} = useGetProjectsUsersQuery(projectId)
+  
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     notes: "",
-    status: "STUCK",
-    dueDate: new Date(),
+    status: status? status: "STUCK",
+    dueDate: new Date().toISOString(),
     assignedToId: "",
   });
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -28,12 +42,31 @@ function CreateTask() {
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    try {
+      await createTask({...formData, projectId}).unwrap()
+
+      setFormData({
+        title: "",
+        description: "",
+        notes: "",
+        status: "STUCK",
+        dueDate: formData.dueDate,
+        assignedToId: "",
+      })
+    } catch (err: any) {
+      setError(err.data)
+    }
+    
   };
 
   return (
     <div className="px-10 py-5 space-y-5 mx-auto max-w-4xl">
+      {
+        error && <ErrorPopup message={error} onClose={() => setError(null)}/>
+      }
       <h2 className="text-2xl font-bold mb-4">Create Task</h2>
       <form onSubmit={handleSubmit}>
         <CreateInput
@@ -54,9 +87,16 @@ function CreateTask() {
           name="notes"
           onChange={handleChange}
           value={formData.notes}
+          required={false}
         />
+        {
+          isLoading? <Loading/>: isError? <span>Error load project's users</span>:
+          <Select label="Assigned to" name="assignedToId" onChange={handleChange} value={formData.assignedToId} options={data?.users.map(user => ({label: user.name, value: user.id}))}/>
+        }
+        <Select label="Status" value={formData.status} name="status" onChange={handleChange} options={[{value: "STUCK", label: "Stuck"}, {value: "WORKING_ON", label: "Wroking on"}, {value: "DONE", label: "Done"}]}/>
+
         <div className="flex justify-end space-x-2">
-          <CancelButton href="/" />
+          <CancelButton href={`/projects/${projectId}`} />
           <CreateButton />
         </div>
       </form>

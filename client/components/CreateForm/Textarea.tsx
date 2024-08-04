@@ -5,9 +5,10 @@ type Props = {
   label: string;
   value: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  required?: boolean
 };
 
-function Textarea({ name, label, value, onChange }: Props) {
+function Textarea({ name, label, value, onChange, required=true }: Props) {
   return (
     <div className="mb-5">
       <label htmlFor={name} className="block text-gray-700 font-bold mb-2">
@@ -19,6 +20,7 @@ function Textarea({ name, label, value, onChange }: Props) {
         value={value}
         onChange={onChange}
         className="w-full border border-slate-200 p-1 rounded-md "
+        required={required}
       />
     </div>
   );

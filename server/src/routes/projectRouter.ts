@@ -50,6 +50,21 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:id/users", async (req: Request, res: Response) => {
+  const {id} = req.params
+  
+  const projectsUsers = await prisma.project.findFirst({
+    where: {
+      id
+    },
+    select: {
+      users: true
+    }
+  })
+
+  res.json(projectsUsers)
+})
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];

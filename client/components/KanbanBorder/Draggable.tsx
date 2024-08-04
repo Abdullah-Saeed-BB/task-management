@@ -33,7 +33,7 @@ export default function Draggable({ task }: Props) {
   return (
     <div
       style={style}
-      className="p-3 drop-shadow my-1 max-w-64 w-full bg-white rounded-md text-start space-y-4"
+      className="p-3 drop-shadow my-1 w-full bg-white rounded-md text-start space-y-4"
     >
       <div className="flex justify-between gap-1">
         <div>

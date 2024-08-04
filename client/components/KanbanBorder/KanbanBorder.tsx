@@ -7,7 +7,6 @@ import {
   DndContext,
   DragEndEvent,
   UniqueIdentifier,
-  closestCenter,
   closestCorners,
 } from "@dnd-kit/core";
 import Droppable from "./Droppable";
