@@ -2,7 +2,11 @@
 import Loading from "@/components/Loading";
 import Table from "@/components/Table/Table";
 import TableTd from "@/components/Table/TableTd";
-import { useDeleteUserMutation, useGetUsersQuery } from "@/lib/slices/apiSlice";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "@/lib/store/slices/apiSlice";
+import { useUserPermissions } from "@/lib/useUserPermissions";
 import Avatar from "boring-avatars";
 
 type User = {
@@ -14,8 +18,9 @@ type User = {
 };
 
 function UsersTable() {
-  const { data, isLoading, isError } = useGetUsersQuery();
+  const { data, isLoading, isError } = useGetUsersQuery(null);
   const [deleteUser] = useDeleteUserMutation();
+  const user = useUserPermissions();
 
   if (isLoading) return <Loading />;
   if (isError) return <div>Error fetching data</div>;
@@ -26,8 +31,8 @@ function UsersTable() {
       columns={["User", "email", "role", "Actions"]}
       data={data as User[]}
       viewAction="users"
-      deleteAction={deleteUser}
-      create
+      deleteAction={user.isEmployee ? null : deleteUser}
+      create={!user.isEmployee}
       filter={{
         label: "Role",
         name: "role",

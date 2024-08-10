@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SideBar from "@/components/SideBar/SideBar";
 import { Nunito_Sans } from "next/font/google";
-import StoreProvider from "@/lib/StoreProvider";
+import StoreProvider from "@/lib/store/StoreProvider";
 
 const font = Nunito_Sans({ subsets: ["latin"], weight: "400" });
 
@@ -20,12 +19,7 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="en">
         <body className={font.className}>
-          <div className="flex">
-            <div className="mr-64">
-              <SideBar />
-            </div>
-            <main className="w-full">{children}</main>
-          </div>
+          <main>{children}</main>
         </body>
       </html>
     </StoreProvider>

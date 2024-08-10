@@ -12,9 +12,10 @@ type Props = {
   children: Function;
   data: Object[];
   filter?: { label: string; name: string; logic: { [key: string]: boolean } };
-  deleteAction?: Function;
+  deleteAction?: Function | null;
   viewAction?: string;
   create?: boolean;
+  isUserMinusIcon?: boolean;
 };
 
 function Table({
@@ -26,6 +27,7 @@ function Table({
   deleteAction,
   viewAction,
   create,
+  isUserMinusIcon = false,
 }: Props) {
   // const [items, setItems] = useState(data);
 
@@ -82,6 +84,7 @@ function Table({
                     <TableDeleteAction
                       id={item.id}
                       deleteAction={deleteAction}
+                      isUserMinusIcon={isUserMinusIcon}
                     />
                   ) : (
                     <></>

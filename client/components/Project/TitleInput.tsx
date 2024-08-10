@@ -1,11 +1,17 @@
 "use client";
-import { useUpdateProjectMutation } from "@/lib/slices/apiSlice";
+import { useUpdateProjectMutation } from "@/lib/store/slices/apiSlice";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import ErrorPopup from "../ErrorPopup";
 
-function TitleInput({ name, id }: { name: string; id: string }) {
+type Props = {
+  name: string;
+  id: string;
+  isEmployee: boolean;
+};
+
+function TitleInput({ name, id, isEmployee }: Props) {
   const [error, setError] = useState<null | string>(null);
   const [updateProject] = useUpdateProjectMutation();
   const [title, setTitle] = useState(name);
@@ -23,6 +29,8 @@ function TitleInput({ name, id }: { name: string; id: string }) {
       setError(err.data);
     }
   };
+
+  if (isEmployee) return <h3 className="text-lg pr-5">{title}</h3>;
 
   return (
     <div className="w-52 flex items-center gap-2">

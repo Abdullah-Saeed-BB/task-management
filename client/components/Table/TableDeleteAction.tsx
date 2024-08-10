@@ -1,4 +1,4 @@
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import ErrorPopup from "../ErrorPopup";
@@ -6,9 +6,10 @@ import ErrorPopup from "../ErrorPopup";
 type Props = {
   id: string;
   deleteAction: Function;
+  isUserMinusIcon: boolean;
 };
 
-function TableDeleteAction({ id, deleteAction }: Props) {
+function TableDeleteAction({ id, deleteAction, isUserMinusIcon }: Props) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +32,11 @@ function TableDeleteAction({ id, deleteAction }: Props) {
       disabled={loading}
       className="text-lg text-rose-500 duration-100 hover:text-rose-600 disabled:text-rose-700"
     >
-      <FontAwesomeIcon icon={faTrash} />
+      {isUserMinusIcon ? (
+        <FontAwesomeIcon icon={faUserMinus} />
+      ) : (
+        <FontAwesomeIcon icon={faTrash} />
+      )}
     </button>
   );
 }

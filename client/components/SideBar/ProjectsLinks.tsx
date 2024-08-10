@@ -2,14 +2,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import CreateProject from "./CreateProject";
-import { useGetProjectsQuery } from "@/lib/slices/apiSlice";
+import { useGetProjectsQuery } from "@/lib/store/slices/apiSlice";
 import Loading from "../Loading";
 import type { Project } from "@/lib/type";
+import { useUserPermissions } from "@/lib/useUserPermissions";
 
 function ProjectsLinks() {
-  // { projects }: { projects: Project[] }
   const pathname = usePathname();
-  // const [data, setData] = useState(projects);
+  const user = useUserPermissions();
 
   const { data, isLoading, isError } = useGetProjectsQuery();
 
@@ -48,7 +48,7 @@ function ProjectsLinks() {
         })}
         <li className="py-1 my-2 pl-4">
           {/* <CreateProject projectState={[data, setData]} /> */}
-          <CreateProject />
+          {!user.isEmployee && <CreateProject />}
         </li>
       </ul>
     </div>

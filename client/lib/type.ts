@@ -21,6 +21,14 @@ export interface User {
   role: "EMPLOYEE" | "MANAGER";
 }
 
+export interface ProjectsUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  tasks: Task[];
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -30,4 +38,6 @@ export interface Task {
   dueDate: string;
   assignedToId: string;
   assignedTo: User;
+  project: Project;
+  projectId: string;
 }

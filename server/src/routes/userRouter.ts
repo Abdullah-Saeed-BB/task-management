@@ -1,9 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import express, { Request, Response } from "express";
+import jwt, { Secret } from "jsonwebtoken";
+import { authenticateToken } from "../server";
 
 const router = express.Router();
 
 const prisma = new PrismaClient();
+
+interface User {
+  id: string;
+  role: "EMPLOYEE" | "MANAGER";
+}
 
 router.get("/", async (req: Request, res: Response) => {
   const allUsers = await prisma.user.findMany({
@@ -55,6 +62,31 @@ router.put("/:id", async (req: Request, res: Response) => {
   } catch {
     res.status(400).json("There is an error happened during update this user");
   }
+});
+
+// Authentication
+
+router.post("/login", async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!password || !email)
+    return res.status(400).json("There is no email or passowrd");
+
+  const user = await prisma.user.findFirst({
+    where: {
+      password,
+      email,
+    },
+  });
+
+  if (!user) return res.status(401).json("Wrong password or email");
+
+  const accessToken = jwt.sign(
+    { id: user.id, isEmployee: user.role == "EMPLOYEE" },
+    process.env.ACCESS_TOKEN as Secret
+  );
+
+  res.json({ accessToken, user });
 });
 
 export default router;

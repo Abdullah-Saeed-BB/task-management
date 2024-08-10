@@ -12,9 +12,10 @@ import Link from "next/link";
 
 type Props = {
   task: Task;
+  userId: string;
 };
 
-export default function Draggable({ task }: Props) {
+export default function Draggable({ task, userId }: Props) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: task.id,
@@ -41,9 +42,11 @@ export default function Draggable({ task }: Props) {
           <p className="text-sm line-clamp-1">{task.description}</p>
         </div>
         <div className="flex flex-col items-center gap-1 text-slate-600">
-          <button ref={setNodeRef} {...listeners} {...attributes}>
-            <FontAwesomeIcon icon={faGripVertical} className="size-5" />
-          </button>
+          {task.assignedToId === userId && (
+            <button ref={setNodeRef} {...listeners} {...attributes}>
+              <FontAwesomeIcon icon={faGripVertical} className="size-5" />
+            </button>
+          )}
           <Link href={`/task/${task.id}`}>
             <FontAwesomeIcon icon={faEye} />
           </Link>
@@ -55,7 +58,7 @@ export default function Draggable({ task }: Props) {
           className="flex gap-1 bg-slate-200 items-center py-2 pr-2 rounded-full h-6 w-fit"
         >
           <Avatar name={task.assignedToId} variant="beam" size="2.25em" />
-          <p>{task.assignedTo.name}</p>
+          <p>{task.assignedToId === userId ? "YOU" : task.assignedTo.name}</p>
         </Link>
         <div
           className={

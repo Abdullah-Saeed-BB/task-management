@@ -5,23 +5,26 @@ const router = express.Router();
 
 const prisma = new PrismaClient();
 
-const colors: String[] = [
+const colors: string[] = [
+  "#f59e0b",
+  "#facc15",
   "#84cc16",
   "#4ade80",
-  "#10b981",
   "#2dd4bf",
-  "#06b6d4",
   "#38bdf8",
   "#3b82f6",
-  "#818cf8",
   "#8b5cf6",
   "#c084fc",
+  "#d946ef",
 ];
 
 router.get("/", async (req: Request, res: Response) => {
+  const { id, isEmployee } = req.body.user;
+
   const allProjects = await prisma.project.findMany({
     orderBy: { createdAt: "desc" },
     include: { users: true, _count: { select: { tasks: true } } },
+    where: isEmployee ? { users: { some: { id } } } : {},
   });
 
   res.json(allProjects);
@@ -29,52 +32,70 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { id: userId } = req.body.user;
 
   try {
     const project = await prisma.project.findFirst({
       where: { id },
       include: {
-        tasks: {
-          include: { assignedTo: { select: { id: true, name: true } } },
-          orderBy: { createdAt: "desc" },
-        },
         users: true,
       },
     });
 
+    const tasksAT = await prisma.task.findMany({
+      where: { assignedToId: userId, projectId: id },
+      include: { assignedTo: { select: { id: true, name: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const tasksNAT = await prisma.task.findMany({
+      where: { assignedToId: { not: userId }, projectId: id },
+      include: { assignedTo: { select: { id: true, name: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+
     if (!project) throw new Error("We did not find this project");
 
-    res.json(project);
+    res.json({ ...project, tasks: [...tasksAT, ...tasksNAT] });
   } catch (err: any) {
+    console.log(err.message);
     res.status(400).json(err.message);
   }
 });
 
 router.get("/:id/users", async (req: Request, res: Response) => {
-  const {id} = req.params
-  
+  const { id } = req.params;
+
   const projectsUsers = await prisma.project.findFirst({
     where: {
-      id
+      id,
     },
     select: {
-      users: true
-    }
-  })
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          password: true,
+          tasks: true,
+        },
+      },
+    },
+  });
 
-  res.json(projectsUsers)
-})
+  res.json(projectsUsers);
+});
 
 router.post("/", async (req: Request, res: Response) => {
   try {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     const createdProject = await prisma.project.create({
-      data: { ...req.body, color: randomColor },
+      data: { title: req.body.title, color: randomColor },
     });
 
     res.json(createdProject);
-  } catch {
+  } catch (err: any) {
     res.status(400).json("Cannot create this project, there is error happened");
   }
 });
@@ -104,6 +125,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { color, title } = req.body;
 
   if (!(await prisma.project.findFirst({ where: { id } }))) {
     return res
@@ -114,7 +136,7 @@ router.put("/:id", async (req: Request, res: Response) => {
   try {
     const updatedProject = await prisma.project.update({
       where: { id },
-      data: req.body,
+      data: { color, title },
     });
 
     res.json(updatedProject);
@@ -141,10 +163,10 @@ router.put("/:projectId/:userId", async (req: Request, res: Response) => {
 
   try {
     const assignedProject = await prisma.project.update({
+      where: { id: projectId },
       data: {
         users: { connect: { id: userId } },
       },
-      where: { id: projectId },
       include: { users: true },
     });
 
@@ -155,5 +177,43 @@ router.put("/:projectId/:userId", async (req: Request, res: Response) => {
       .json("There is an error when assigning the user to the project");
   }
 });
+
+router.put(
+  "/disconnect/:projectId/:userId",
+  async (req: Request, res: Response) => {
+    const { projectId, userId } = req.params;
+
+    if (!(await prisma.project.findFirst({ where: { id: projectId } }))) {
+      return res
+        .status(400)
+        .json("The project you want to disconnect, does not exist");
+    }
+    if (!(await prisma.user.findFirst({ where: { id: userId } }))) {
+      return res
+        .status(400)
+        .json("The user you want to get disconnect does not exist");
+    }
+
+    try {
+      const disconnectProject = await prisma.project.update({
+        where: { id: projectId },
+        data: {
+          users: { disconnect: { id: userId } },
+        },
+        include: { users: true },
+      });
+
+      await prisma.task.deleteMany({
+        where: { assignedToId: userId, projectId },
+      });
+
+      res.json(disconnectProject);
+    } catch {
+      res
+        .status(400)
+        .json("There is an error when disconnect the user to the project");
+    }
+  }
+);
 
 export default router;

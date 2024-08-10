@@ -32,15 +32,33 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
+  const {
+    title,
+    description,
+    notes,
+    status,
+    dueDate,
+    assignedToId,
+    projectId,
+  } = req.body;
+
   try {
     const createdTask = await prisma.task.create({
-      data: req.body,
+      data: {
+        title,
+        description,
+        notes,
+        status,
+        dueDate,
+        assignedToId,
+        projectId,
+      },
     });
 
     res.json(createdTask);
   } catch (err: any) {
-    // res.status(400).json("Cannot create this task, there is error happened");
-    res.status(400).json(err.message)
+    res.status(400).json("Cannot create this task, there is error happened");
+    // res.status(400).json(err.message);
   }
 });
 
@@ -61,6 +79,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { title, description, status, assignedToId, dueDate, notes } = req.body;
 
   if (!(await prisma.task.findFirst({ where: { id } }))) {
     return res.status(400).json("The task you want to update, does not exist");
@@ -69,12 +88,21 @@ router.put("/:id", async (req: Request, res: Response) => {
   try {
     const updatedTask = await prisma.task.update({
       where: { id },
-      data: req.body,
+      data: {
+        title,
+        description,
+        status,
+        assignedToId,
+        dueDate,
+        notes,
+      },
       include: { assignedTo: true, project: true },
     });
 
     res.json(updatedTask);
-  } catch {
+  } catch (err: any) {
+    // res.status(400).json(err.message);
+    console.log(err.message);
     res.status(400).json("There is an error happened during update this task");
   }
 });

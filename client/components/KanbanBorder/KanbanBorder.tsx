@@ -11,19 +11,25 @@ import {
 } from "@dnd-kit/core";
 import Droppable from "./Droppable";
 import Draggable from "./Draggable";
-import { useChangeTaskStatusMutation } from "@/lib/slices/apiSlice";
+import { useChangeTaskStatusMutation } from "@/lib/store/slices/apiSlice";
+import ErrorPopup from "../ErrorPopup";
+import { useUserPermissions } from "@/lib/useUserPermissions";
 
 type TaskStatus = "STUCK" | "WORKING_ON" | "DONE";
 
 function KanbanBorder({
   Tasks,
   projectId,
+  canCreate,
 }: {
   Tasks: Task[];
   projectId: string;
+  canCreate: boolean;
 }) {
+  const [error, setError] = useState<string | null>(null);
   const [tasks, setTasks] = useState(Tasks);
   const [changeTaskStatus] = useChangeTaskStatusMutation();
+  const user = useUserPermissions();
 
   const convertStatus = (status: UniqueIdentifier | undefined): TaskStatus => {
     switch (status) {
@@ -52,39 +58,57 @@ function KanbanBorder({
       );
 
       try {
-        await changeTaskStatus({ id: active.id, status: newStatus });
+        await changeTaskStatus({ id: active.id, status: newStatus }).unwrap();
       } catch (err: any) {
-        console.log(`Error: ${err}`);
+        setError(err.data);
       }
     }
   };
 
   return (
     <div className="flex m-3 space-x-3">
+      {error ? (
+        <ErrorPopup message={error} onClose={() => setError(null)} />
+      ) : null}
       <DndContext
         id="dnd-context"
         collisionDetection={closestCorners}
         onDragEnd={onDragEnd}
       >
-        <Droppable id="STUCK" bgColor="bg-red-200" projectId={projectId}>
+        <Droppable
+          id="STUCK"
+          bgColor="bg-red-200"
+          projectId={projectId}
+          canCreate={canCreate}
+        >
           {tasks
             .filter((t) => t.status === "STUCK")
             .map((t) => (
-              <Draggable key={t.id} task={t} />
+              <Draggable key={t.id} task={t} userId={user.id} />
             ))}
         </Droppable>
-        <Droppable id="WORKING_ON" bgColor="bg-amber-200" projectId={projectId}>
+        <Droppable
+          id="WORKING_ON"
+          bgColor="bg-amber-200"
+          projectId={projectId}
+          canCreate={canCreate}
+        >
           {tasks
             .filter((t) => t.status === "WORKING_ON")
             .map((t) => (
-              <Draggable key={t.id} task={t} />
+              <Draggable key={t.id} task={t} userId={user.id} />
             ))}
         </Droppable>
-        <Droppable id="DONE" bgColor="bg-green-200" projectId={projectId}>
+        <Droppable
+          id="DONE"
+          bgColor="bg-green-200"
+          projectId={projectId}
+          canCreate={canCreate}
+        >
           {tasks
             .filter((t) => t.status === "DONE")
             .map((t) => (
-              <Draggable key={t.id} task={t} />
+              <Draggable key={t.id} task={t} userId={user.id} />
             ))}
         </Droppable>
       </DndContext>

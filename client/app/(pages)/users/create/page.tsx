@@ -6,8 +6,7 @@ import {
 import CreateInput from "@/components/CreateForm/Input";
 import Select from "@/components/CreateForm/Select";
 import ErrorPopup from "@/components/ErrorPopup";
-import { useCreateUserMutation } from "@/lib/slices/apiSlice";
-import Link from "next/link";
+import { useCreateUserMutation } from "@/lib/store/slices/apiSlice";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 const CreateUser = () => {

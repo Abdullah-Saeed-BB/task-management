@@ -22,11 +22,14 @@ function Select({ name, label, value, onChange, options }: Props) {
         className="w-full px-2 py-1 border rounded-md"
         required
       >
-        {options ?options.map((option, i) => (
+        <option disabled value="">
+          -- select an option --
+        </option>
+        {options?.map((option, i) => (
           <option key={i} value={option.value}>
             {option.label}
           </option>
-        )): <option className="italic">No data to provide</option>}
+        ))}
       </select>
     </div>
   );

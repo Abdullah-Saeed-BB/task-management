@@ -1,5 +1,5 @@
 "use client";
-import { useCreateProjectMutation } from "@/lib/slices/apiSlice";
+import { useCreateProjectMutation } from "@/lib/store/slices/apiSlice";
 import { faPlus, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
