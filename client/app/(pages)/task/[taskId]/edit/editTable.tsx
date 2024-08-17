@@ -56,7 +56,7 @@ function EditTable({ task }: { task: Task }) {
   };
 
   return (
-    <div className="py-6 px-8 max-w-4xl m-auto">
+    <div>
       {error ? (
         <ErrorPopup message={error} onClose={() => setError(null)} />
       ) : null}

@@ -18,7 +18,7 @@ function Input<T extends string | number>({
   required = true,
 }: Props<T>) {
   return (
-    <div className="mb-5">
+    <div className="mb-5 w-full">
       {label && (
         <label htmlFor={name} className="block text-gray-700 font-bold mb-2">
           {label}

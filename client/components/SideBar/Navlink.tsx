@@ -22,7 +22,9 @@ function Navlink() {
 
   return (
     <div>
-      <p className="text-slate-500 text-sm uppercase mb-5 ml-4">Main menu</p>
+      <p className="text-slate-500 text-sm uppercase lg:mb-5 mb-2 ml-4">
+        Main menu
+      </p>
       <div className=" *:flex *:items-center *:gap-4 *:pl-4 *:py-1 space-y-2">
         {links.map((l) => {
           const isActive = pathname === l.path;

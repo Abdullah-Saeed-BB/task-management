@@ -68,7 +68,7 @@ function CreateTask({ params }: { params: Params }) {
   };
 
   return (
-    <div className="px-10 py-5 space-y-5 mx-auto max-w-4xl">
+    <div className="md:px-10 md:py-5 px-2 py-4 space-y-5 mx-auto max-w-4xl">
       {error && <ErrorPopup message={error} onClose={() => setError(null)} />}
       <h2 className="text-2xl font-bold mb-4">Create Task</h2>
       <form onSubmit={handleSubmit}>

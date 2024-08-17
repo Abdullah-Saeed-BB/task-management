@@ -14,6 +14,12 @@ import Draggable from "./Draggable";
 import { useChangeTaskStatusMutation } from "@/lib/store/slices/apiSlice";
 import ErrorPopup from "../ErrorPopup";
 import { useUserPermissions } from "@/lib/useUserPermissions";
+import {
+  faBarsProgress,
+  faClipboardCheck,
+  faEllipsis,
+  faList,
+} from "@fortawesome/free-solid-svg-icons";
 
 type TaskStatus = "STUCK" | "WORKING_ON" | "DONE";
 
@@ -66,7 +72,7 @@ function KanbanBorder({
   };
 
   return (
-    <div className="flex m-3 space-x-3">
+    <div className="flex px-2 py-3 overflow-auto space-x-3">
       {error ? (
         <ErrorPopup message={error} onClose={() => setError(null)} />
       ) : null}
@@ -77,7 +83,7 @@ function KanbanBorder({
       >
         <Droppable
           id="STUCK"
-          bgColor="bg-red-200"
+          icon={faList}
           projectId={projectId}
           canCreate={canCreate}
         >
@@ -89,7 +95,7 @@ function KanbanBorder({
         </Droppable>
         <Droppable
           id="WORKING_ON"
-          bgColor="bg-amber-200"
+          icon={faBarsProgress}
           projectId={projectId}
           canCreate={canCreate}
         >
@@ -101,7 +107,7 @@ function KanbanBorder({
         </Droppable>
         <Droppable
           id="DONE"
-          bgColor="bg-green-200"
+          icon={faClipboardCheck}
           projectId={projectId}
           canCreate={canCreate}
         >

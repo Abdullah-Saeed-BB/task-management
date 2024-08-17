@@ -1,4 +1,5 @@
 "use client";
+import ErrorPage from "@/components/ErrorPage";
 import ErrorPopup from "@/components/ErrorPopup";
 import Loading from "@/components/Loading";
 import {
@@ -71,7 +72,7 @@ function TaskPage({ params }: { params: Params }) {
         <Loading />
       </div>
     );
-  if (isError) return <p>Error load task data</p>;
+  if (isError) return <ErrorPage>Error load task data</ErrorPage>;
 
   if (data) {
     if (!notes && typeof notes !== "string") {
@@ -90,7 +91,7 @@ function TaskPage({ params }: { params: Params }) {
     };
 
     return (
-      <div className="py-6 px-8 max-w-4xl m-auto">
+      <div className="md:px-10 md:py-5 px-2 py-4 space-y-5 mx-auto max-w-6xl">
         {error ? (
           <ErrorPopup message={error} onClose={() => setError(null)} />
         ) : null}
@@ -125,7 +126,7 @@ function TaskPage({ params }: { params: Params }) {
               <td className="text-slate-500">Assigned To</td>
               <td>
                 <Link
-                  href={`/user/${data.assignedToId}`}
+                  href={`/users/${data.assignedToId}`}
                   className="flex items-center mt-1 gap-2"
                 >
                   <Avatar name={data.assignedToId} variant="beam" size="2rem" />
@@ -143,7 +144,14 @@ function TaskPage({ params }: { params: Params }) {
             </tr>
             <tr>
               <td className="text-slate-500">Project</td>
-              <td>{data.project.title}</td>
+              <td>
+                <Link
+                  href={`/projects/${data.projectId}`}
+                  className="underline"
+                >
+                  {data.project.title}
+                </Link>
+              </td>
             </tr>
           </tbody>
         </table>

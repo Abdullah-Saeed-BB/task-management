@@ -34,7 +34,7 @@ export default function Draggable({ task, userId }: Props) {
   return (
     <div
       style={style}
-      className="p-3 drop-shadow my-1 w-full bg-white rounded-md text-start space-y-4"
+      className="p-3 drop-shadow touch-none mb-3 w-full bg-white rounded-sm text-start space-y-4"
     >
       <div className="flex justify-between gap-1">
         <div>
@@ -54,11 +54,15 @@ export default function Draggable({ task, userId }: Props) {
       </div>
       <div className="flex justify-between items-center text-sm">
         <Link
-          href={`/user/${task.assignedToId}`}
-          className="flex gap-1 bg-slate-200 items-center py-2 pr-2 rounded-full h-6 w-fit"
+          href={`/users/${task.assignedToId}`}
+          className="flex gap-1 max-w-32 bg-slate-200 items-center py-2 pr-2 rounded-full h-6 w-fit"
         >
-          <Avatar name={task.assignedToId} variant="beam" size="2.25em" />
-          <p>{task.assignedToId === userId ? "YOU" : task.assignedTo.name}</p>
+          <span className="grow">
+            <Avatar name={task.assignedToId} variant="beam" size="2.25em" />
+          </span>
+          <p className="line-clamp-1">
+            {task.assignedToId === userId ? "YOU" : task.assignedTo.name}
+          </p>
         </Link>
         <div
           className={

@@ -1,19 +1,22 @@
 "use client";
+import ErrorPage from "@/components/ErrorPage";
 import Loading from "@/components/Loading";
 import ProgressBar from "@/components/ProgressBar";
 import Table from "@/components/Table/Table";
 import TableTd from "@/components/Table/TableTd";
 import {
-  useDeleteUserMutation,
   useDisconnectProjectsUserMutation,
   useGetProjectsUsersQuery,
 } from "@/lib/store/slices/apiSlice";
-import { ProjectsUser, User } from "@/lib/type";
+import { ProjectsUser } from "@/lib/type";
+import { useUserPermissions } from "@/lib/useUserPermissions";
 import Avatar from "boring-avatars";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import Link from "next/link";
 
 function ProjectsUsersPage({ params }: { params: Params }) {
   const { projectId } = params;
+  const user = useUserPermissions();
 
   const { data, isLoading, isError } = useGetProjectsUsersQuery(projectId);
   const [disconnectUser] = useDisconnectProjectsUserMutation();
@@ -27,18 +30,23 @@ function ProjectsUsersPage({ params }: { params: Params }) {
         <Loading />
       </div>
     );
-  else if (isError) return <div>Error fetch project&#39;s users</div>;
-  else if (data) {
+  else if (isError) {
+    return <ErrorPage>Error fetch project&#39;s users</ErrorPage>;
+  } else if (data) {
     return (
-      <div className="px-10 py-5 space-y-5 mx-auto max-w-6xl">
+      <div className="md:px-10 md:py-5 px-2 py-4 space-y-5 mx-auto max-w-6xl">
         <div>
           <Table
             columns={["User", "Email", "Tasks Progress", "Actions"]}
             data={data.users}
-            title="Project's Users"
-            deleteAction={disconnectUserBrief}
-            viewAction="users"
-            isUserMinusIcon={true}
+            title={
+              <Link href="./" className="underline">
+                Project&#39;s Users
+              </Link>
+            }
+            deleteAction={user.isEmployee ? null : disconnectUserBrief}
+            viewAction="/users"
+            isUserMinusIcon
           >
             {(item: ProjectsUser) => {
               const tasks = item.tasks.filter(
@@ -51,9 +59,11 @@ function ProjectsUsersPage({ params }: { params: Params }) {
               return (
                 <>
                   <TableTd>
-                    <div className="flex items-center gap-2">
-                      <Avatar name={item.id} variant="beam" />
-                      <h3 className="text-lg">{item.name}</h3>
+                    <div className="flex text-lg items-center gap-3">
+                      <span className="w-10">
+                        <Avatar name={item.id} variant="beam" />
+                      </span>
+                      <p className="line-clamp-1">{item.name}</p>
                     </div>
                   </TableTd>
                   <TableTd>
@@ -72,7 +82,6 @@ function ProjectsUsersPage({ params }: { params: Params }) {
             }}
           </Table>
         </div>
-        {/* <pre>{JSON.stringify(data, undefined, 2)}</pre> */}
       </div>
     );
   }

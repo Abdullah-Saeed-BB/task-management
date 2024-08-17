@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import TableFilter from "./TableFilter";
 import TableDeleteAction from "./TableDeleteAction";
 import TableTd from "./TableTd";
 import TableViewAction from "./TableViewAction";
@@ -8,10 +7,9 @@ import Link from "next/link";
 
 type Props = {
   columns: string[];
-  title: string;
+  title: string | JSX.Element;
   children: Function;
   data: Object[];
-  filter?: { label: string; name: string; logic: { [key: string]: boolean } };
   deleteAction?: Function | null;
   viewAction?: string;
   create?: boolean;
@@ -23,7 +21,6 @@ function Table({
   title,
   children,
   data,
-  filter,
   deleteAction,
   viewAction,
   create,
@@ -55,57 +52,59 @@ function Table({
           )}
         </div>
       </div>
-      <table className="w-full table-auto border-collapse border border-gray-200">
-        <thead>
-          <tr className="bg-slate-200 space-x-6">
-            {columns.map((c: string) => (
-              <th
-                key={c}
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-slate-600 uppercase tracking-wider"
-              >
-                {c}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        {data.length ? (
-          <tbody className="*:border-b">
-            {data.map((item: any, i: number) => (
-              <tr key={i}>
-                {children(item)}
-                <TableTd isAction={true}>
-                  {viewAction ? (
-                    <TableViewAction link={`${viewAction}/${item.id}`} />
-                  ) : (
-                    <></>
-                  )}
-                  {deleteAction ? (
-                    <TableDeleteAction
-                      id={item.id}
-                      deleteAction={deleteAction}
-                      isUserMinusIcon={isUserMinusIcon}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </TableTd>
-              </tr>
-            ))}
-          </tbody>
-        ) : (
-          <tfoot>
-            <tr>
-              <td
-                colSpan={columns.length}
-                className="p-10 text-center text-xl text-slate-600"
-              >
-                No rows to display
-              </td>
+      <div className="overflow-auto">
+        <table className="md:w-full w-screen border-collapse border border-gray-200">
+          <thead>
+            <tr className="bg-slate-200 space-x-6">
+              {columns.map((c: string) => (
+                <th
+                  key={c}
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-slate-600 uppercase tracking-wider"
+                >
+                  {c}
+                </th>
+              ))}
             </tr>
-          </tfoot>
-        )}
-      </table>
+          </thead>
+          {data.length ? (
+            <tbody className="*:border-b">
+              {data.map((item: any, i: number) => (
+                <tr key={i}>
+                  {children(item)}
+                  <TableTd isAction={true}>
+                    {viewAction ? (
+                      <TableViewAction link={`${viewAction}/${item.id}`} />
+                    ) : (
+                      <></>
+                    )}
+                    {deleteAction ? (
+                      <TableDeleteAction
+                        id={item.id}
+                        deleteAction={deleteAction}
+                        isUserMinusIcon={isUserMinusIcon}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </TableTd>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tfoot>
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="p-10 text-center text-xl text-slate-600"
+                >
+                  No rows to display
+                </td>
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
     </div>
   );
 }

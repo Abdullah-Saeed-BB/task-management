@@ -3,11 +3,14 @@ import { useDroppable } from "@dnd-kit/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ErrorPopup from "../ErrorPopup";
+import { useUserPermissions } from "@/lib/useUserPermissions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   children: JSX.Element | JSX.Element[];
   id: string;
-  bgColor: string;
+  icon: IconDefinition;
   projectId: string;
   canCreate: boolean;
 };
@@ -15,7 +18,7 @@ type Props = {
 export default function Droppable({
   children,
   id,
-  bgColor,
+  icon,
   projectId,
   canCreate,
 }: Props) {
@@ -27,9 +30,9 @@ export default function Droppable({
   const style = {
     backgroundColor: isOver ? "#cbd5e1" : undefined,
   };
+  const user = useUserPermissions();
 
   const handleNavigate = () => {
-    // href={`/projects/${projectId}/create-task?status=${id}`}
     if (canCreate) {
       route.push(`/projects/${projectId}/create-task?status=${id}`);
     } else {
@@ -43,20 +46,25 @@ export default function Droppable({
     <div
       ref={setNodeRef}
       style={style}
-      className="min-w-72 w-full duration-100 min-h-32 rounded-xl bg-slate-200 flex flex-col justify-between"
+      className="min-w-72 w-full duration-100 min-h-32 rounded-sm bg-slate-200 flex flex-col justify-between"
     >
       {error ? (
         <ErrorPopup message={error} onClose={() => setError(null)} />
       ) : null}
       <div>
-        <h2 className={"text-center p-3 rounded-t-xl " + bgColor}>
-          {id.replace("_", " ")}
-        </h2>
-        <div className="p-3">{children}</div>
+        <div className="px-3 pt-3 space-x-3 text-slate-600">
+          <FontAwesomeIcon icon={icon} size="lg" />
+          <span className="text-center rounded-t-xl capitalize">
+            {id.replace("_", " ").toLowerCase()}
+          </span>
+        </div>
+        <div className="px-2 py-3">{children}</div>
       </div>
-      <div className="w-full text-center pb-3 text-slate-700">
-        <button onClick={handleNavigate}>Add task +</button>
-      </div>
+      {!user.isEmployee && (
+        <div className="w-full px-4 text-center pb-3 text-slate-700">
+          <button onClick={handleNavigate}>+ Add task</button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import ErrorPage from "@/components/ErrorPage";
 import KanbanBorder from "@/components/KanbanBorder/KanbanBorder";
 import Loading from "@/components/Loading";
 import AssignUser from "@/components/Project/AssignUser";
@@ -21,14 +22,25 @@ function ProjectPage({ params }: { params: Params }) {
       </div>
     );
 
-  if (isError) return <div>Error fetch project data</div>;
+  if (isError) return <ErrorPage>Error fetch project data.</ErrorPage>;
 
   if (project) {
     const canCreate = !!project.users.length;
 
+    if (
+      !project.users.find((projectUser) => projectUser.id === user.id) &&
+      user.isEmployee
+    ) {
+      return (
+        <h2 className="text-center text-xl  mt-12">
+          You not assigned in this project.
+        </h2>
+      );
+    }
+
     return (
       <div>
-        <header className="h-14 px-4 bg-slate-300 flex items-center gap-5">
+        <header className="h-14 overflow-x-autoto px-4 bg-slate-300 flex items-center gap-5">
           <ColorPicker
             color={project.color}
             projectId={projectId}
@@ -42,19 +54,20 @@ function ProjectPage({ params }: { params: Params }) {
           <UsersList
             users={project.users}
             projectId={projectId}
-            isBackWhite={false}
+            ringColor="ring-slate-300"
           />
           {!user.isEmployee && (
             <AssignUser projectId={projectId} projectUsers={project.users} />
           )}
         </header>
-        <div className="mx-auto max-w-5xl">
-          <div className="flex justify-end"></div>
-          <KanbanBorder
-            canCreate={canCreate}
-            Tasks={project.tasks || []}
-            projectId={projectId}
-          />
+        <div className="mx-auto px-1 max-w-6xl">
+          <div>
+            <KanbanBorder
+              canCreate={canCreate}
+              Tasks={project.tasks || []}
+              projectId={projectId}
+            />
+          </div>
         </div>
       </div>
     );

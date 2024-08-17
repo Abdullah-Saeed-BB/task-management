@@ -13,11 +13,14 @@ export async function POST(req: NextRequest) {
   try {
     const data = await res.json();
 
-    if (!data?.accessToken) {
+    if (!data?.accessToken || !data?.refreshToken) {
       return NextResponse.json(data, { status: 400 });
     }
 
-    cookies().set("authentication", data.accessToken);
+    const { accessToken, refreshToken } = data;
+
+    cookies().set("access_token", accessToken);
+    cookies().set("refresh_token", refreshToken);
 
     return NextResponse.json("Succeful creating token", { status: 200 });
   } catch (err: any) {

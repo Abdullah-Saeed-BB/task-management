@@ -17,18 +17,14 @@ router.get("/", async (req: Request, res: Response) => {
 router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  try {
-    const task = await prisma.task.findFirst({
-      where: { id },
-      include: { assignedTo: true, project: true },
-    });
+  const task = await prisma.task.findFirst({
+    where: { id },
+    include: { assignedTo: true, project: true },
+  });
 
-    if (!task) throw new Error("We did not find task");
+  if (!task) return res.status(400).json("We did not find task");
 
-    res.json(task);
-  } catch (err: any) {
-    res.status(400).json(err.message);
-  }
+  res.json(task);
 });
 
 router.post("/", async (req: Request, res: Response) => {
@@ -58,7 +54,6 @@ router.post("/", async (req: Request, res: Response) => {
     res.json(createdTask);
   } catch (err: any) {
     res.status(400).json("Cannot create this task, there is error happened");
-    // res.status(400).json(err.message);
   }
 });
 
@@ -101,8 +96,6 @@ router.put("/:id", async (req: Request, res: Response) => {
 
     res.json(updatedTask);
   } catch (err: any) {
-    // res.status(400).json(err.message);
-    console.log(err.message);
     res.status(400).json("There is an error happened during update this task");
   }
 });

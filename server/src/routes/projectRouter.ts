@@ -23,7 +23,10 @@ router.get("/", async (req: Request, res: Response) => {
 
   const allProjects = await prisma.project.findMany({
     orderBy: { createdAt: "desc" },
-    include: { users: true, _count: { select: { tasks: true } } },
+    include: {
+      users: true,
+      tasks: { select: { status: true } },
+    },
     where: isEmployee ? { users: { some: { id } } } : {},
   });
 
@@ -42,6 +45,8 @@ router.get("/:id", async (req: Request, res: Response) => {
       },
     });
 
+    if (!project) throw new Error("We did not find this project");
+
     const tasksAT = await prisma.task.findMany({
       where: { assignedToId: userId, projectId: id },
       include: { assignedTo: { select: { id: true, name: true } } },
@@ -54,11 +59,8 @@ router.get("/:id", async (req: Request, res: Response) => {
       orderBy: { createdAt: "desc" },
     });
 
-    if (!project) throw new Error("We did not find this project");
-
     res.json({ ...project, tasks: [...tasksAT, ...tasksNAT] });
   } catch (err: any) {
-    console.log(err.message);
     res.status(400).json(err.message);
   }
 });
@@ -82,6 +84,9 @@ router.get("/:id/users", async (req: Request, res: Response) => {
       },
     },
   });
+
+  if (!projectsUsers)
+    return res.status(400).json("We did not find this project");
 
   res.json(projectsUsers);
 });
@@ -119,7 +124,6 @@ router.delete("/:id", async (req: Request, res: Response) => {
     res.json(deletedProject);
   } catch (err: any) {
     res.status(400).json("Error happened during deleting this project");
-    // res.status(400).json(err.message);
   }
 });
 

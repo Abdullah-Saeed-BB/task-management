@@ -10,10 +10,10 @@ type Props = {
     role: "EMPLOYEE" | "MANAGER";
   }[];
   projectId: string;
-  isBackWhite?: boolean;
+  ringColor?: string;
 };
 
-function UsersList({ users, projectId, isBackWhite = true }: Props) {
+function UsersList({ users, projectId, ringColor = "ring-white" }: Props) {
   if (!users.length) return <p className="text-sm italic">No users</p>;
   return (
     <Link href={`/projects/${projectId}/users`}>
@@ -21,9 +21,7 @@ function UsersList({ users, projectId, isBackWhite = true }: Props) {
         {users.length <= 5 ? (
           users.map((user) => (
             <li
-              className={`drop-shadow-sm rounded-full ring-2 ring-${
-                isBackWhite ? "white" : "slate-300"
-              }`}
+              className={`drop-shadow-sm rounded-full ring-2 ${ringColor}`}
               key={user.id}
             >
               <Avatar name={user.id} variant="beam" />
@@ -33,9 +31,7 @@ function UsersList({ users, projectId, isBackWhite = true }: Props) {
           <>
             {users.slice(0, 4).map((user) => (
               <li
-                className={`drop-shadow-sm rounded-full ring-2 ${
-                  isBackWhite ? "ring-white" : "ring-slate-300"
-                }`}
+                className={`drop-shadow-sm rounded-full ring-2 ${ringColor}`}
                 key={user.id}
               >
                 <Avatar name={user.id} variant="beam" />

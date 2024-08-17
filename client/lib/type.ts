@@ -2,15 +2,8 @@ export interface Project {
   id: string;
   title: string;
   color: string;
-  users: {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    role: "EMPLOYEE" | "MANAGER";
-  }[];
-  _count: { tasks: number };
-  tasks?: Task[];
+  users: User[];
+  tasks: Task[];
 }
 
 export interface User {
@@ -19,6 +12,7 @@ export interface User {
   email: string;
   password: string;
   role: "EMPLOYEE" | "MANAGER";
+  projects: Project[];
 }
 
 export interface ProjectsUser {

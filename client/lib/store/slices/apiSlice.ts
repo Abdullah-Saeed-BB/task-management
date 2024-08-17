@@ -6,8 +6,8 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:4000/api/",
-    prepareHeaders(headers, api) {
-      const token = Cookies.get("authentication");
+    prepareHeaders(headers) {
+      const token = Cookies.get("access_token");
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
@@ -20,7 +20,7 @@ export const apiSlice = createApi({
     // Projects
     getProjects: builder.query<Project[], void>({
       query: () => "project",
-      providesTags: ["Projects"],
+      providesTags: ["Project", "Projects"],
     }),
 
     getProject: builder.query<Project, string>({
@@ -47,7 +47,7 @@ export const apiSlice = createApi({
         url: `project/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Projects", "User"],
     }),
 
     updateProject: builder.mutation({
@@ -64,7 +64,7 @@ export const apiSlice = createApi({
         url: `project/disconnect/${projectId}/${userId}`,
         method: "PUT",
       }),
-      invalidatesTags: ["Project's users", "Project"],
+      invalidatesTags: ["Project's users", "Project", "User"],
     }),
 
     assignProjectsUser: builder.mutation({
@@ -72,13 +72,32 @@ export const apiSlice = createApi({
         url: `project/${projectId}/${userId}`,
         method: "PUT",
       }),
-      invalidatesTags: ["Project's users", "Project"],
+      invalidatesTags: ["Project's users", "Project", "User"],
     }),
 
     // Users
     getUsers: builder.query<User[], string | null>({
       query: (role) => (role ? `user/${role}` : "user"),
       providesTags: ["User"],
+    }),
+
+    getUser: builder.query<User, string>({
+      query: (id) => `user/${id}`,
+      providesTags: ["User", "Project's users"],
+    }),
+
+    getClientUser: builder.query<User, void>({
+      query: () => `user/client`,
+      providesTags: ["User"],
+    }),
+
+    updateUser: builder.mutation({
+      query: ({ id, user }) => ({
+        url: `user/${id}`,
+        method: "PUT",
+        body: user,
+      }),
+      invalidatesTags: ["User", "Project"],
     }),
 
     deleteUser: builder.mutation({
@@ -110,7 +129,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: { status },
       }),
-      invalidatesTags: ["Project", "Task", "Project's users"],
+      invalidatesTags: ["Project", "Task", "Project's users", "User"],
     }),
 
     createTask: builder.mutation({
@@ -119,7 +138,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: task,
       }),
-      invalidatesTags: ["Project", "Project's users"],
+      invalidatesTags: ["Project", "Projects", "Project's users"],
     }),
 
     updateTask: builder.mutation({
@@ -141,7 +160,6 @@ export const apiSlice = createApi({
   }),
 });
 
-// useDeleteElementMutation
 export const {
   useGetProjectsQuery,
   useGetProjectQuery,
@@ -152,6 +170,9 @@ export const {
   useDisconnectProjectsUserMutation,
   useAssignProjectsUserMutation,
   useGetUsersQuery,
+  useGetUserQuery,
+  useGetClientUserQuery,
+  useUpdateUserMutation,
   useDeleteUserMutation,
   useCreateUserMutation,
   useGetTaskQuery,

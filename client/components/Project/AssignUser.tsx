@@ -9,6 +9,7 @@ import { ChangeEvent, useState } from "react";
 import Loading from "../Loading";
 import { User } from "@/lib/type";
 import ErrorPopup from "../ErrorPopup";
+import ErrorPage from "../ErrorPage";
 
 type Props = {
   projectId: string;
@@ -26,7 +27,6 @@ function AssignUser({ projectId, projectUsers }: Props) {
       try {
         await assignUser({ projectId, userId: e.target.value }).unwrap();
       } catch (err: any) {
-        // console.log(err.data);
         setError(err.data);
       }
 
@@ -35,7 +35,7 @@ function AssignUser({ projectId, projectUsers }: Props) {
   };
 
   if (isLoading) return <Loading />;
-  else if (isError) return <div>Error fetch data</div>;
+  else if (isError) return <ErrorPage>Error fetch data</ErrorPage>;
   else if (data) {
     const restUsers = data.filter(
       (user) => !projectUsers.find((projectUser) => projectUser.id === user.id)

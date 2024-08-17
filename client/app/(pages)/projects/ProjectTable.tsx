@@ -1,5 +1,7 @@
 "use client";
+import ErrorPage from "@/components/ErrorPage";
 import Loading from "@/components/Loading";
+import ProgressBar from "@/components/ProgressBar";
 import Table from "@/components/Table/Table";
 import TableTd from "@/components/Table/TableTd";
 import UsersList from "@/components/UsersList";
@@ -16,7 +18,7 @@ function ProjectTable() {
   const user = useUserPermissions();
 
   if (isLoading) return <Loading />;
-  if (isError) return <div>Error fetching data</div>;
+  if (isError) return <ErrorPage>Error fetching data</ErrorPage>;
   if (data) {
     return (
       <Table
@@ -26,15 +28,27 @@ function ProjectTable() {
         deleteAction={user.isEmployee ? null : deleteProject}
         viewAction="projects"
       >
-        {(item: Project) => (
-          <>
-            <TableTd>{item.title}</TableTd>
-            <TableTd>{item._count.tasks}</TableTd>
-            <TableTd>
-              <UsersList users={item.users} projectId={item.id} />
-            </TableTd>
-          </>
-        )}
+        {(item: Project) => {
+          const tasksDone = item.tasks.filter(
+            (t) => t.status === "DONE"
+          ).length;
+          const progress = (tasksDone / item.tasks.length) * 100;
+
+          return (
+            <>
+              <TableTd>{item.title}</TableTd>
+              <TableTd>
+                <div className="flex items-center gap-2">
+                  <ProgressBar progress={isNaN(progress) ? 0 : progress} />
+                  <span>{item.tasks.length}</span>
+                </div>
+              </TableTd>
+              <TableTd>
+                <UsersList users={item.users} projectId={item.id} />
+              </TableTd>
+            </>
+          );
+        }}
       </Table>
     );
   }

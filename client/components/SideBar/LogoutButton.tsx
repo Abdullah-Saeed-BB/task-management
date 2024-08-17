@@ -1,12 +1,10 @@
 "use client";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 
 function LogoutButton() {
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     await fetch("/api/logout", { method: "DELETE" });
@@ -17,10 +15,9 @@ function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center w-full text-lg gap-4"
+      className="rounded-full bg-slate-300 text-slate-700 box-content size-9 flex justify-center items-center"
     >
-      <FontAwesomeIcon icon={faRightFromBracket} className="size-7" />
-      <span>Log out</span>
+      <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4" />
     </button>
   );
 }

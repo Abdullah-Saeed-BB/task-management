@@ -11,7 +11,9 @@ function TableTd({ children, isAction = false }: Props) {
   }
 
   return (
-    <td className="px-6 py-4 whitespace-normal break-words">{children}</td>
+    <td className="px-6 py-4 whitespace-normal break-words max-w-52">
+      {children}
+    </td>
   );
 }
 

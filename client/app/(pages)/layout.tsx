@@ -1,3 +1,4 @@
+import Header from "@/components/SideBar/Header";
 import SideBar from "@/components/SideBar/SideBar";
 
 function PagesLayout({
@@ -7,10 +8,13 @@ function PagesLayout({
 }>) {
   return (
     <div className="flex">
-      <div className="mr-64">
+      <div className="md:block hidden">
         <SideBar />
       </div>
-      <main className="w-full">{children}</main>
+      <div className="md:hidden block">
+        <Header />
+      </div>
+      <main className="w-full mt-14 md:mt-0">{children}</main>
     </div>
   );
 }
