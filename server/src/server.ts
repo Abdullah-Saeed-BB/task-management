@@ -15,11 +15,6 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  console.log(`${req.method} - ${req.path}`);
-  next();
-});
-
 // Using routes
 app.use("/api/project", authenticateToken, projectRouter);
 app.use("/api/task", authenticateToken, taskRouter);
@@ -30,6 +25,8 @@ app.use("/api/user", userRouter);
 app.listen(4000, () => {
   console.log("Successful - server is running");
 });
+
+export default app;
 
 // Authentication middleware
 
