@@ -61,7 +61,7 @@ export default function Droppable({
         <div className="px-2 py-3">{children}</div>
       </div>
       {!user.isEmployee && (
-        <div className="w-full px-4 text-center pb-3 text-slate-700">
+        <div className="w-full px-4 text-center pb-3 text-slate-700 focus:opacity-70">
           <button onClick={handleNavigate}>+ Add task</button>
         </div>
       )}
