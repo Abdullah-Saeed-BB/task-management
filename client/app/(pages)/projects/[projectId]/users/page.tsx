@@ -40,7 +40,7 @@ function ProjectsUsersPage({ params }: { params: Params }) {
             columns={["User", "Email", "Tasks Progress", "Actions"]}
             data={data.users}
             title={
-              <Link href="./" className="underline">
+              <Link href="./" className="focus:opacity-70 underline">
                 Project&#39;s Users
               </Link>
             }

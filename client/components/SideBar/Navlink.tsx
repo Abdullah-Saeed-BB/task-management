@@ -25,7 +25,7 @@ function Navlink() {
       <p className="text-slate-500 text-sm uppercase lg:mb-5 mb-2 ml-4">
         Main menu
       </p>
-      <div className=" *:flex *:items-center *:gap-4 *:pl-4 *:py-1 space-y-2">
+      <div className=" *:flex *:items-center *:gap-4 *:pl-4 *:py-1  space-y-2">
         {links.map((l) => {
           const isActive = pathname === l.path;
 
@@ -33,7 +33,7 @@ function Navlink() {
             <Link
               key={l.path}
               href={l.path}
-              className={isActive ? "bg-slate-300" : ""}
+              className={`focus:opacity-80 ${isActive ? "bg-slate-300" : ""}`}
             >
               <FontAwesomeIcon icon={l.icon} className="size-5" />
               <span>{l.title}</span>

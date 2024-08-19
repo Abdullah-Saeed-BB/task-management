@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.SERVER_URL}/api/`,
+    baseUrl: "http://localhost:4000/api/",
     prepareHeaders(headers) {
       const token = Cookies.get("access_token");
       if (token) {
@@ -15,12 +15,24 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Projects", "Project", "Project's users", "User", "Task"],
+  tagTypes: [
+    "Projects",
+    "Client",
+    "Project",
+    "Project's users",
+    "User",
+    "Task",
+  ],
   endpoints: (builder) => ({
     // Projects
+    getProjectsTitles: builder.query<Project[], void>({
+      query: () => "project",
+      providesTags: ["Projects"],
+    }),
+
     getProjects: builder.query<Project[], void>({
       query: () => "project",
-      providesTags: ["Project", "Projects"],
+      providesTags: ["Projects", "Project"],
     }),
 
     getProject: builder.query<Project, string>({
@@ -88,7 +100,7 @@ export const apiSlice = createApi({
 
     getClientUser: builder.query<User, void>({
       query: () => `user/client`,
-      providesTags: ["User"],
+      providesTags: ["Client"],
     }),
 
     updateUser: builder.mutation({
@@ -97,7 +109,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: user,
       }),
-      invalidatesTags: ["User", "Project"],
+      invalidatesTags: ["Client", "Project"],
     }),
 
     deleteUser: builder.mutation({
@@ -105,7 +117,7 @@ export const apiSlice = createApi({
         url: `user/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User", "Projects", "Project"],
+      invalidatesTags: ["User", "Project"],
     }),
 
     createUser: builder.mutation({
@@ -138,7 +150,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: task,
       }),
-      invalidatesTags: ["Project", "Projects", "Project's users"],
+      invalidatesTags: ["Project", "Project's users"],
     }),
 
     updateTask: builder.mutation({
@@ -161,6 +173,7 @@ export const apiSlice = createApi({
 });
 
 export const {
+  useGetProjectsTitlesQuery,
   useGetProjectsQuery,
   useGetProjectQuery,
   useGetProjectsUsersQuery,

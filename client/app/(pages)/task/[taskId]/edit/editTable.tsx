@@ -40,7 +40,6 @@ function EditTable({ task }: { task: Task }) {
 
   const handleApply = async () => {
     setUpdateMessage("...");
-    console.log(formData);
 
     try {
       await updateTask({
@@ -140,7 +139,7 @@ function EditTable({ task }: { task: Task }) {
               <td>
                 <Link
                   href={`./`}
-                  className="py-1 px-4 rounded-md border border-slate-500 text-slate-500"
+                  className="py-1 px-4 rounded-md border focus:opacity-70 border-slate-500 text-slate-500"
                 >
                   Cancel
                 </Link>
@@ -148,6 +147,7 @@ function EditTable({ task }: { task: Task }) {
               <td>
                 <button
                   onClick={handleApply}
+                  disabled={updateMessage === "..."}
                   className="py-1 px-2 bg-slate-300 rounded-md duration-100 hover:bg-slate-400"
                 >
                   {updateMessage}

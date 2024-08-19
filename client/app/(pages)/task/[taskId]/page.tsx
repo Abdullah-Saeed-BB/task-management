@@ -44,7 +44,6 @@ function TaskPage({ params }: { params: Params }) {
 
       router.push(`/projects/${data?.project.id}`);
     } catch (err: any) {
-      console.log(err);
       setError(err.data);
     }
   };
@@ -61,7 +60,7 @@ function TaskPage({ params }: { params: Params }) {
       } catch {
         setNotesUpdate("ERROR");
       }
-    }, 2000);
+    }, 1000);
     setNotesUpdate("LOADING");
     setNotes(newNotes);
   };
@@ -99,12 +98,15 @@ function TaskPage({ params }: { params: Params }) {
           <h2 className="text-xl font-bold line-clamp-1">{data.title}</h2>
           {!user.isEmployee && (
             <div className="flex gap-3">
-              <Link href={`/task/${taskId}/edit`} className="text-xl">
+              <Link
+                href={`/task/${taskId}/edit`}
+                className="text-xl focus:opacity-70"
+              >
                 <FontAwesomeIcon icon={faPenToSquare} />
               </Link>
               <button
                 onClick={handleDelete}
-                className="text-xl text-red-500 hover:text-red-600 duration-100"
+                className="text-xl text-red-500 hover:text-red-600 duration-100 focus:opacity-70"
               >
                 <FontAwesomeIcon icon={faTrash} />
               </button>
@@ -127,7 +129,7 @@ function TaskPage({ params }: { params: Params }) {
               <td>
                 <Link
                   href={`/users/${data.assignedToId}`}
-                  className="flex items-center mt-1 gap-2"
+                  className="flex items-center mt-1 gap-2 duration-100 hover:tracking-wider focus:opacity-70"
                 >
                   <Avatar name={data.assignedToId} variant="beam" size="2rem" />
                   <h4>{data.assignedTo.name}</h4>
@@ -147,7 +149,7 @@ function TaskPage({ params }: { params: Params }) {
               <td>
                 <Link
                   href={`/projects/${data.projectId}`}
-                  className="underline"
+                  className="underline focus:opacity-70"
                 >
                   {data.project.title}
                 </Link>

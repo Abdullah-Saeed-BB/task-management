@@ -17,7 +17,7 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="text-center">
           <Link
             href={`projects/${project.id}`}
-            className="text-lg text-slate-700 line-clamp-1 mb-2"
+            className="text-lg focus:opacity-70 text-slate-700 line-clamp-1 mb-2"
           >
             {project.title}
           </Link>

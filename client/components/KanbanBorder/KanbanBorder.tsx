@@ -90,7 +90,12 @@ function KanbanBorder({
           {tasks
             .filter((t) => t.status === "STUCK")
             .map((t) => (
-              <Draggable key={t.id} task={t} userId={user.id} />
+              <Draggable
+                key={t.id}
+                task={t}
+                userId={user.id}
+                isEmployee={user.isEmployee}
+              />
             ))}
         </Droppable>
         <Droppable
@@ -102,7 +107,12 @@ function KanbanBorder({
           {tasks
             .filter((t) => t.status === "WORKING_ON")
             .map((t) => (
-              <Draggable key={t.id} task={t} userId={user.id} />
+              <Draggable
+                key={t.id}
+                task={t}
+                userId={user.id}
+                isEmployee={user.isEmployee}
+              />
             ))}
         </Droppable>
         <Droppable
@@ -114,7 +124,12 @@ function KanbanBorder({
           {tasks
             .filter((t) => t.status === "DONE")
             .map((t) => (
-              <Draggable key={t.id} task={t} userId={user.id} />
+              <Draggable
+                key={t.id}
+                task={t}
+                userId={user.id}
+                isEmployee={user.isEmployee}
+              />
             ))}
         </Droppable>
       </DndContext>

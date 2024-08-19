@@ -21,6 +21,7 @@ function CreateUser() {
     role: "employee",
   });
   const [showPassword, setShowPassword] = useState("password");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleShowPassword = (e: FormEvent) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ function CreateUser() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setIsDisabled(true);
 
     try {
       await createUser(formData).unwrap();
@@ -53,6 +55,7 @@ function CreateUser() {
     } catch (err: any) {
       setError(err.data);
     }
+    setIsDisabled(false);
   };
 
   return (
@@ -109,7 +112,7 @@ function CreateUser() {
         />
         <div className="flex justify-end space-x-2">
           <CancelButton href="/users" />
-          <CreateButton />
+          <CreateButton disabled={isDisabled} />
         </div>
       </form>
     </div>

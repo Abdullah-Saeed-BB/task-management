@@ -35,14 +35,9 @@ function Table({
           {title} ({data.length})
         </h2>
         <div className="flex gap-2">
-          {/* {filter ? (
-            <TableFilter filter={filter} setItems={setItems} data={data} />
-          ) : (
-            <></>
-          )} */}
           {create ? (
             <Link
-              className="bg-blue-500 text-white rounded-md text-center px-3 py-2 text-sm uppercase"
+              className="bg-blue-500 focus:bg-blue-700 duration-200 text-white rounded-md text-center px-3 py-2 text-sm uppercase"
               href={`${viewAction}/create`}
             >
               Create

@@ -21,7 +21,10 @@ export default function Error() {
       <h3 className="text-3xl text-slate-700 mb-3">
         Sorry, Page you looking for not exist
       </h3>
-      <Link href="/" className="text-xl text-blue-500 underline">
+      <Link
+        href="/"
+        className="text-xl text-blue-500 focus:text-blue-300 underline"
+      >
         Return Home
       </Link>
     </div>

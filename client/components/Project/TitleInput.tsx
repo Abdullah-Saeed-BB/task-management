@@ -1,8 +1,13 @@
 "use client";
 import { useUpdateProjectMutation } from "@/lib/store/slices/apiSlice";
-import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faFloppyDisk,
+  faSpinner,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import ErrorPopup from "../ErrorPopup";
 
 type Props = {
@@ -12,22 +17,31 @@ type Props = {
 };
 
 function TitleInput({ name, id, isEmployee }: Props) {
-  const [error, setError] = useState<null | string>(null);
   const [updateProject] = useUpdateProjectMutation();
   const [title, setTitle] = useState(name);
-  const oldTitle = useRef(name);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+  const [titleStatus, setTitleStatus] = useState("");
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
+    setTitleStatus("LOADING");
+    const updatedTitle = e.target.value;
+    setTitle(updatedTitle);
 
-  const handleApply = async () => {
-    try {
-      await updateProject({ id, project: { title } }).unwrap();
-      oldTitle.current = title;
-    } catch (err: any) {
-      setError(err.data);
+    if (timeoutRef) {
+      clearTimeout(timeoutRef.current);
     }
+
+    timeoutRef.current = setTimeout(async () => {
+      try {
+        await updateProject({
+          id,
+          project: { title: updatedTitle },
+        }).unwrap();
+        setTitleStatus("SAVED");
+      } catch {
+        setTitleStatus("ERROR");
+      }
+    }, 1500);
   };
 
   if (isEmployee) return <h3 className="text-lg pr-5">{title}</h3>;
@@ -39,15 +53,19 @@ function TitleInput({ name, id, isEmployee }: Props) {
         onChange={handleInput}
         className="bg-slate-300 w-20 px-1 grow border-b border-slate-400 duration-200 text-lg outline-none focus:border-slate-600"
       />
-      <button
-        className={`text-2xl duration-200 text-slate-700 ${
-          title == oldTitle.current ? "invisible opacity-0" : "opacity-100"
-        }`}
-        onClick={handleApply}
-      >
-        <FontAwesomeIcon icon={faFloppyDisk} />
-      </button>
-      {error && <ErrorPopup message={error} onClose={() => setError(null)} />}
+      {titleStatus === "LOADING" ? (
+        <span className="text-slate-600 animate-spin">
+          <FontAwesomeIcon icon={faSpinner} size="lg" />
+        </span>
+      ) : titleStatus === "SAVED" ? (
+        <FontAwesomeIcon
+          className="text-blue-500"
+          size="lg"
+          icon={faCircleCheck}
+        />
+      ) : titleStatus === "ERROR" ? (
+        <FontAwesomeIcon className="text-red-600" size="lg" icon={faXmark} />
+      ) : null}
     </div>
   );
 }

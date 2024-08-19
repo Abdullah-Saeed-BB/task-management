@@ -24,8 +24,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json("Succeful creating token", { status: 200 });
   } catch (err: any) {
-    console.log(`Error is: ${err}`);
-
     return NextResponse.json(err, { status: 400 });
   }
 }

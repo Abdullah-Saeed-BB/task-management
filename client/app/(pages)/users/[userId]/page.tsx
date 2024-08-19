@@ -50,7 +50,10 @@ function User({ params }: { params: Params }) {
             <p className="capitalize">{user.role.toLowerCase()}</p>
           </div>
           {userPermissions.id === userId && (
-            <Link href={`edit`} className="pr-5 text-slate-600">
+            <Link
+              href={`edit`}
+              className="pr-5 focus:opacity-70 text-slate-600"
+            >
               <FontAwesomeIcon icon={faEdit} size="xl" />
             </Link>
           )}

@@ -5,8 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon src/server",
-    "build": "npx prisma generate",
-    "postinstall": "npx prisma generate"
+    "build": "npx prisma generate"
   },
   "keywords": [],
   "author": "",

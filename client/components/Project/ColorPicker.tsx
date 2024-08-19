@@ -1,5 +1,6 @@
 "use client";
 import { useUpdateProjectMutation } from "@/lib/store/slices/apiSlice";
+import { throttle } from "lodash";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -25,11 +26,14 @@ function ColorPicker({ color, projectId, isEmployee }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const [updateProject] = useUpdateProjectMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeColor = async (color: string) => {
+    setIsLoading(true);
     try {
       await updateProject({ id: projectId, project: { color } });
     } catch {}
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -68,11 +72,16 @@ function ColorPicker({ color, projectId, isEmployee }: Props) {
         }`}
       ></button>
       {isOpen && (
-        <ul className="z-50 absolute mt-1 drop-shadow-md rounded-md bg-slate-100 flex w-24 flex-wrap gap-2 p-2 justify-between items-center">
+        <ul
+          className={`z-50 absolute mt-1 duration-100 drop-shadow-md rounded-md flex w-24 flex-wrap gap-2 p-2 justify-between items-center ${
+            isLoading ? "bg-slate-200" : "bg-slate-100"
+          }`}
+        >
           {colors.map((color, i) => (
             <li key={i}>
               <button
                 onClick={() => handleChangeColor(color)}
+                disabled={isLoading}
                 style={{ backgroundColor: color }}
                 className="size-5 rounded-sm border border-slate-100 outline outline-1 outline-slate-300 drop-shadow-md"
               ></button>

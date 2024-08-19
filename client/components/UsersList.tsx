@@ -16,7 +16,7 @@ type Props = {
 function UsersList({ users, projectId, ringColor = "ring-white" }: Props) {
   if (!users.length) return <p className="text-sm italic">No users</p>;
   return (
-    <Link href={`/projects/${projectId}/users`}>
+    <Link className="focus:opacity-70" href={`/projects/${projectId}/users`}>
       <ul className="flex -space-x-4 items-end">
         {users.length <= 5 ? (
           users.map((user) => (

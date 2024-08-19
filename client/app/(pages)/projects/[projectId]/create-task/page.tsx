@@ -24,6 +24,7 @@ function CreateTask({ params }: { params: Params }) {
   const [error, setError] = useState(null);
   const [createTask] = useCreateTaskMutation();
   const { data, isLoading, isError } = useGetProjectsUsersQuery(projectId);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -46,6 +47,7 @@ function CreateTask({ params }: { params: Params }) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setIsDisabled(true);
 
     try {
       await createTask({
@@ -65,6 +67,7 @@ function CreateTask({ params }: { params: Params }) {
     } catch (err: any) {
       setError(err.data);
     }
+    setIsDisabled(false);
   };
 
   return (
@@ -132,7 +135,7 @@ function CreateTask({ params }: { params: Params }) {
 
         <div className="flex justify-end space-x-2">
           <CancelButton href={`/projects/${projectId}`} />
-          <CreateButton />
+          <CreateButton disabled={isDisabled} />
         </div>
       </form>
     </div>

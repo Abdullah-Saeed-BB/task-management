@@ -12,7 +12,7 @@ function ProfileLink() {
         {!isError && user && (
           <Link
             href={`/users/${user.id}`}
-            className="flex lg:flex-row items-center gap-3"
+            className="flex transition-opacity focus:opacity-70 lg:flex-row items-center gap-3"
           >
             <span className="rounded-full drop-shadow-md border border-slate-200">
               <Avatar name={user.id} variant="beam" size="3rem" />

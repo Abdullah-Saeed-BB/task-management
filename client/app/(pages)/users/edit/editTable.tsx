@@ -82,12 +82,13 @@ function EditTable({ user }: { user: User }) {
           </div>
           <Link
             href={`./`}
-            className="py-1 md:w-20 w-16 text-center rounded-md border border-slate-500 text-slate-500"
+            className="py-1 md:w-20 focus:opacity-70 w-16 text-center rounded-md border border-slate-500 text-slate-500"
           >
             Cancel
           </Link>
           <button
             onClick={handleApply}
+            disabled={updateMessage === "..."}
             className="py-1 w-20 bg-slate-300 rounded-md duration-100 hover:bg-slate-400"
           >
             {updateMessage}

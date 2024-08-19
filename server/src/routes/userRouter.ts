@@ -101,8 +101,6 @@ router.put("/:id", authenticateToken, async (req: Request, res: Response) => {
     return res.status(400).json("The user you want to update, does not exist");
   }
 
-  console.log(req.body.user);
-
   try {
     if (email === "admin") {
       return res.status(400).json("You can't update 'admin' user");

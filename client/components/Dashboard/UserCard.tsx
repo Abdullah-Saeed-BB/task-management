@@ -9,7 +9,7 @@ function UserCard({ user }: { user: User }) {
     <Link
       href={`/users/${user.id}`}
       key={user.id}
-      className="flex items-center space-x-3"
+      className="flex items-center focus:opacity-70 space-x-3"
     >
       <span className="drop-shadow-sm">
         <Avatar name={user.id} variant="beam" size="3rem" />

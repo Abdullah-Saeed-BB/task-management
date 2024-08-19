@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import CreateProject from "./CreateProject";
-import { useGetProjectsQuery } from "@/lib/store/slices/apiSlice";
+import { useGetProjectsTitlesQuery } from "@/lib/store/slices/apiSlice";
 import Loading from "../Loading";
 import type { Project } from "@/lib/type";
 import { useUserPermissions } from "@/lib/useUserPermissions";
@@ -11,7 +11,7 @@ function ProjectsLinks() {
   const pathname = usePathname();
   const user = useUserPermissions();
 
-  const { data, isLoading, isError } = useGetProjectsQuery();
+  const { data, isLoading, isError } = useGetProjectsTitlesQuery();
 
   if (isLoading) return <Loading />;
   else if (isError)
@@ -40,7 +40,10 @@ function ProjectsLinks() {
                 key={p.id}
                 className={`py-1 my-2 pl-4 ${isActive ? "bg-slate-300" : ""}`}
               >
-                <Link href={path} className="flex items-center gap-3">
+                <Link
+                  href={path}
+                  className="flex items-center gap-3 transition-opacity focus:opacity-70"
+                >
                   <span
                     className="rounded-md basis-5 size-5 md:size-4 md:basis-4 lg:size-5 lg:basis-5 drop-shadow-md "
                     style={{ backgroundColor: p.color }}
