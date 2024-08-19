@@ -26,6 +26,7 @@ function AssignUser({ projectId, projectUsers }: Props) {
   const handleSelect = async (e: ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
       setIsDisabled(true);
+
       try {
         await assignUser({ projectId, userId: e.target.value }).unwrap();
       } catch (err: any) {
@@ -52,7 +53,11 @@ function AssignUser({ projectId, projectUsers }: Props) {
         {isAssign ? (
           isDisabled ? (
             <span>
-              <FontAwesomeIcon icon={faSpinner} />
+              <FontAwesomeIcon
+                icon={faSpinner}
+                size="lg"
+                className="animate-spin text-slate-600"
+              />
             </span>
           ) : (
             <select
