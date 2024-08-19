@@ -3,7 +3,7 @@ import {
   useAssignProjectsUserMutation,
   useGetUsersQuery,
 } from "@/lib/store/slices/apiSlice";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, useState } from "react";
 import Loading from "../Loading";
@@ -19,17 +19,20 @@ type Props = {
 function AssignUser({ projectId, projectUsers }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [isAssign, setIsAssign] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const { data, isLoading, isError } = useGetUsersQuery("employee");
   const [assignUser] = useAssignProjectsUserMutation();
 
   const handleSelect = async (e: ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
+      setIsDisabled(true);
       try {
         await assignUser({ projectId, userId: e.target.value }).unwrap();
       } catch (err: any) {
         setError(err.data);
       }
 
+      setIsDisabled(false);
       setIsAssign(false);
     }
   };
@@ -47,17 +50,23 @@ function AssignUser({ projectId, projectUsers }: Props) {
           <ErrorPopup message={error} onClose={() => setError(null)} />
         ) : null}
         {isAssign ? (
-          <select
-            onChange={handleSelect}
-            className="bg-slate-300 border-b border-slate-500"
-          >
-            <option value="">-- Assign user --</option>
-            {restUsers.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
+          isDisabled ? (
+            <span>
+              <FontAwesomeIcon icon={faSpinner} />
+            </span>
+          ) : (
+            <select
+              onChange={handleSelect}
+              className="bg-slate-300 border-b border-slate-500"
+            >
+              <option value="">-- Assign user --</option>
+              {restUsers.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          )
         ) : (
           <button className="text-slate-600 " onClick={() => setIsAssign(true)}>
             <FontAwesomeIcon icon={faUserPlus} />
