@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000/api/",
+    baseUrl: "https://task-management-server-eta-ten.vercel.app/api/",
     prepareHeaders(headers) {
       const token = Cookies.get("access_token");
       if (token) {

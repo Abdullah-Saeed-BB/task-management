@@ -13,6 +13,7 @@ function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const [showPassword, setShowPassword] = useState("password");
 
@@ -38,6 +39,7 @@ function LoginPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setIsDisabled(true);
 
     const res = await fetch("/api/login", {
       method: "POST",
@@ -50,6 +52,7 @@ function LoginPage() {
       dispatch(apiSlice.util.resetApiState());
       router.replace("/");
     }
+    setIsDisabled(false);
   };
 
   return (
@@ -98,7 +101,9 @@ function LoginPage() {
       </div>
       <button
         type="submit"
-        className="mt-6 drop-shadow-md text-white bg-blue-400 py-2 px-20 rounded-full duration-200 hover:bg-blue-500"
+        className={`mt-6 drop-shadow-md text-white  py-2 px-20 rounded-full duration-200 ${
+          isDisabled ? "bg-indigo-500" : "bg-blue-400 hover:bg-blue-500"
+        }`}
       >
         LOGIN
       </button>
