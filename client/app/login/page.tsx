@@ -101,6 +101,7 @@ function LoginPage() {
       </div>
       <button
         type="submit"
+        disabled={isDisabled}
         className={`mt-6 drop-shadow-md text-white  py-2 px-20 rounded-full duration-200 ${
           isDisabled ? "bg-indigo-500" : "bg-blue-400 hover:bg-blue-500"
         }`}
