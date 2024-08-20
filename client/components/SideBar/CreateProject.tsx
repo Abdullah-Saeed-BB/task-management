@@ -4,21 +4,20 @@ import { faPlus, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
-type Props = {
-  // projectState: [Object[], Function];
-};
-
 function CreateProject() {
   const [addProject] = useCreateProjectMutation();
   const [isCreate, setIsCreate] = useState(false);
   const [input, setInput] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsDisabled(true);
 
     await addProject({ title: input });
 
+    setIsDisabled(false);
     setIsCreate(false);
   };
 
@@ -39,9 +38,10 @@ function CreateProject() {
           name="title"
           type="text"
           onChange={handleInputChange}
+          disabled={isDisabled}
           value={input}
           ref={inputRef}
-          className="shadow  border rounded w-full px-1 text-slate-700 bg-slate-50 focus:outline-none focus:shadow-outline"
+          className="shadow border rounded w-full px-1 text-slate-700 bg-slate-50 focus:outline-none focus:shadow-outline disabled:bg-slate-300"
           required
         />
         <button
