@@ -29,3 +29,14 @@ I developed a full-stack task management application, using Typescript in each f
 </div>
 
 ### Screenshots
+![Screenshot (134)_page-0003](https://github.com/user-attachments/assets/41876b4d-ae6b-467d-8357-64b4b3673a95)
+![Screenshot (134)_page-0005](https://github.com/user-attachments/assets/1976d7db-6346-45db-bbe6-52d62a8fde65)
+![Screenshot (134)_page-0004](https://github.com/user-attachments/assets/c2d4fe5d-6fba-4de5-8803-9fae2e3bef73)
+![Screenshot (134)_page-0006](https://github.com/user-attachments/assets/ce9ef1c9-d865-4574-aa5e-e466792833d7)
+![Screenshot (134)_page-0009](https://github.com/user-attachments/assets/21bf8e6b-bbcd-4082-b5bb-46a86f90b334)
+![Screenshot (134)_page-0011](https://github.com/user-attachments/assets/1532165a-fbb9-4193-b9d8-a31246a354cf)
+![Screenshot (134)_page-0008](https://github.com/user-attachments/assets/7743188e-b3cb-467f-83f2-74bbb4878f9a)
+![Screenshot (134)_page-0002](https://github.com/user-attachments/assets/90cb63e8-24b0-4e16-a514-6b2f52e5c718)
+![Screenshot (134)_page-0007](https://github.com/user-attachments/assets/7f4df2a1-4cf1-459d-9d91-24738050a9c7)
+![Screenshot (134)_page-0001](https://github.com/user-attachments/assets/efccc103-04c2-4081-bb28-85a612ad54c4)
+![Screenshot (134)_page-0010](https://github.com/user-attachments/assets/5012b084-faa5-4a9d-8cc9-d67138f1f14e)
