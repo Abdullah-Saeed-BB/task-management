@@ -35,6 +35,7 @@ I developed a full-stack task management application, using Typescript in each f
 ![Screenshot (134)_page-0006](https://github.com/user-attachments/assets/ce9ef1c9-d865-4574-aa5e-e466792833d7)
 ![Screenshot (134)_page-0009](https://github.com/user-attachments/assets/21bf8e6b-bbcd-4082-b5bb-46a86f90b334)
 ![Screenshot (134)_page-0011](https://github.com/user-attachments/assets/1532165a-fbb9-4193-b9d8-a31246a354cf)
+![Screenshot (133)](https://github.com/user-attachments/assets/8c5e8d2b-e133-4add-9dfe-d39a5c6f8511)
 ![Screenshot (134)_page-0008](https://github.com/user-attachments/assets/7743188e-b3cb-467f-83f2-74bbb4878f9a)
 ![Screenshot (134)_page-0002](https://github.com/user-attachments/assets/90cb63e8-24b0-4e16-a514-6b2f52e5c718)
 ![Screenshot (134)_page-0007](https://github.com/user-attachments/assets/7f4df2a1-4cf1-459d-9d91-24738050a9c7)
